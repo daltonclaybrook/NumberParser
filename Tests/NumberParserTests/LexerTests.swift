@@ -10,6 +10,26 @@ final class LexerTests: XCTestCase {
 		])
 	}
 
+	func testLexerScansUnhyphenated() throws {
+		let lexer = Lexer()
+		let tokens = try lexer.scanNumber(string: "ninety-five thousand one hundred twelve").get()
+		XCTAssertEqual(tokens, [
+			.doubleDigitHyphenated(.ninety, plus: .five),
+			.multiplier(.thousand),
+			.singleDigit(.one),
+			.multiplier(.hundred),
+			.doubleDigitUnhyphenated(.twelve)
+		])
+	}
+
+	func testLexerScansHyphenatedWithoutPlus() throws {
+		let lexer = Lexer()
+		let tokens = try lexer.scanNumber(string: "seventy").get()
+		XCTAssertEqual(tokens, [
+			.doubleDigitHyphenated(.seventy, plus: nil)
+		])
+	}
+
 	func testLexerFailsOnInvalidCharacter() throws {
 		let lexer = Lexer()
 		let result = lexer.scanNumber(string: "one hundr3d fifty-five")
