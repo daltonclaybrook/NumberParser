@@ -6,6 +6,7 @@ public enum ParserError: Error, Equatable {
 	case unknown
 }
 
+/// A utility used to parse integers from strings
 public final class Parser {
 	private let lexer: Lexer
 
@@ -16,6 +17,11 @@ public final class Parser {
 		self.lexer = lexer
 	}
 
+	/// Parse the provided number string and return the resulting integer, or an error if the string
+	/// cannot be parsed.
+	///
+	/// For example, the input "eight thousand four hundred seventy-three"
+	/// returns `.success(8473)`.
 	public func parse(string: String) -> Result<Int, ParserError> {
 		do {
 			let result = try parseThrowing(string: string)
