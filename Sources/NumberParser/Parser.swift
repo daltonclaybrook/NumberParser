@@ -2,6 +2,7 @@ public enum ParserError: Error, Equatable {
 	case lexerError(LexerError)
 	case unexpectedToken(Token)
 	case parsedMultiplierPrecedenceTooHigh(Multiplier)
+	case noSegmentsWereParsed
 	case unknown
 }
 
@@ -39,17 +40,27 @@ public final class Parser {
 		}
 
 		var segments: [NumberSegment] = []
-		var currentMultiplierPrecedence = Multiplier.allCases.last
+		var currentMultiplierPrecedence = Multiplier.allCases.last!
 		while !isAtEnd {
 			let nextSegment = try parseNumberSegment(lessThanOrEqual: currentMultiplierPrecedence)
 			segments.append(nextSegment)
-			currentMultiplierPrecedence = nextSegment.multiplier?.oneLowerPrecedence
+
+			if let nextPrecedence = nextSegment.multiplier?.oneLowerPrecedence {
+				currentMultiplierPrecedence = nextPrecedence
+			} else if !isAtEnd {
+				// Since the last segment multiplier does not have a lower precedence,
+				// this must be the last segment
+				throw ParserError.unexpectedToken(currentToken)
+			}
 		}
 
+		guard !segments.isEmpty else {
+			throw ParserError.noSegmentsWereParsed
+		}
 		return calculateTotalNumber(from: segments)
 	}
 
-	private func parseNumberSegment(lessThanOrEqual: Multiplier?) throws -> NumberSegment {
+	private func parseNumberSegment(lessThanOrEqual: Multiplier) throws -> NumberSegment {
 		var segment = NumberSegment()
 		if willMatch(.singleDigit, .multiplier) && peek(count: 1)?.multiplier == .hundred {
 			segment.hundredsPlace = try consume(type: .singleDigit).singleDigit
@@ -73,7 +84,7 @@ public final class Parser {
 				// This multiplier cannot be `hundred` since that is part of the segment
 				throw ParserError.unexpectedToken(previousToken)
 			}
-			guard let lessThanOrEqual = lessThanOrEqual, multiplier.precedence <= lessThanOrEqual.precedence else {
+			guard multiplier.precedence <= lessThanOrEqual.precedence else {
 				throw ParserError.parsedMultiplierPrecedenceTooHigh(multiplier)
 			}
 			segment.multiplier = multiplier

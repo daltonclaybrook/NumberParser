@@ -55,6 +55,48 @@ final class ParserTests: XCTestCase {
 		let result = try parser.parse(string: "two hundred eighteen million four").get()
 		XCTAssertEqual(result, 218_000_004)
 	}
+
+	func testParserWithValidInput10() throws {
+		let parser = Parser()
+		let result = try parser.parse(string: "nine billion").get()
+		XCTAssertEqual(result, 9_000_000_000)
+	}
+
+	func test_ifEndOfSegmentMultiplerIsHundred_errorIsThrown() {
+		let parser = Parser()
+		let error = parser.parse(string: "twenty-eight hundred").parserError
+		XCTAssertEqual(error, .unexpectedToken(.multiplier(.hundred)))
+	}
+
+	func test_ifPrecedenceOfSegmentIsTooHigh_errorIsThrown() {
+		let parser = Parser()
+		let error = parser.parse(string: "one thousand two million").parserError
+		XCTAssertEqual(error, .parsedMultiplierPrecedenceTooHigh(.million))
+	}
+
+	func test_ifPrecedenceOfSegmentIsSame_errorIsThrown() {
+		let parser = Parser()
+		let error = parser.parse(string: "one thousand two thousand").parserError
+		XCTAssertEqual(error, .parsedMultiplierPrecedenceTooHigh(.thousand))
+	}
+
+	func testEmptyInputThrowsError() {
+		let parser = Parser()
+		let error = parser.parse(string: "    ").parserError
+		XCTAssertEqual(error, .noSegmentsWereParsed)
+	}
+
+	func testUnexpectedToken1() {
+		let parser = Parser()
+		let error = parser.parse(string: "one two three").parserError
+		XCTAssertEqual(error, .unexpectedToken(.singleDigit(.two)))
+	}
+
+	func testUnexpectedToken2() {
+		let parser = Parser()
+		let error = parser.parse(string: "eight million thousand").parserError
+		XCTAssertEqual(error, .unexpectedToken(.multiplier(.thousand)))
+	}
 }
 
 extension Result {
