@@ -32,6 +32,17 @@ final class LexerTests: XCTestCase {
 		])
 	}
 
+	func testLexerScansCapitalizedNumbers() throws {
+		let lexer = Lexer()
+		let tokens = try lexer.scanNumber(string: "OnE hUnDreD EighTy-sevEN").get()
+		XCTAssertEqual(tokens, [
+			.singleDigit(.one),
+			.multiplier(.hundred),
+			.doubleDigitHyphenated(.eighty, plus: .seven),
+			.endOfString
+		])
+	}
+
 	func testLexerFailsOnInvalidCharacter() throws {
 		let lexer = Lexer()
 		let result = lexer.scanNumber(string: "one hundr3d fifty-five")

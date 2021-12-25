@@ -52,7 +52,7 @@ public struct Lexer {
 		}
 
 		if !word.isEmpty {
-			return word
+			return word.lowercased()
 		} else if cursor.isAtEnd {
 			return nil
 		} else {
@@ -69,7 +69,6 @@ public struct Lexer {
 	}
 
 	private func makeUnhyphenatedNumberToken(word: String) throws -> Token {
-		let word = word.lowercased()
 		if word == "zero" {
 			return .zero
 		} else if let digit = Digit(rawValue: word) {
