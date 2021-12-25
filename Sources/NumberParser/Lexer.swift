@@ -85,7 +85,7 @@ public struct Lexer {
 	}
 
 	private func makeHyphenatedNumberToken(prefix: String, cursor: inout Cursor) throws -> Token {
-		guard let prefix = DoubleDigitPrefix(rawValue: prefix) else {
+		guard let digitPrefix = DoubleDigitPrefix(rawValue: prefix) else {
 			throw LexerError.expectedWordToBeDoubleDigitPrefix(prefix)
 		}
 
@@ -99,6 +99,6 @@ public struct Lexer {
 			throw LexerError.expectedWordToBeDigit(suffix)
 		}
 
-		return .doubleDigitHyphenated(prefix, plus: digit)
+		return .doubleDigitHyphenated(digitPrefix, plus: digit)
 	}
 }
