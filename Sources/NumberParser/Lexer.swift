@@ -39,6 +39,7 @@ public struct Lexer {
 				throw LexerError.invalidCharacter(cursor.peek())
 			}
 		}
+		tokens.append(.endOfString)
 		return tokens
 	}
 

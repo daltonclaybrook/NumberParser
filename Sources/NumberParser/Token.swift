@@ -9,6 +9,8 @@ public enum Token: Equatable {
 	case doubleDigitHyphenated(DoubleDigitPrefix, plus: Digit?)
 	/// e.g. thousand, million
 	case multiplier(Multiplier)
+	/// The end of the string to parse
+	case endOfString
 }
 
 public enum Digit: String, CaseIterable {
