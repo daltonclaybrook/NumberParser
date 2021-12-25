@@ -57,21 +57,21 @@ public final class Parser {
 		}
 
 		if match(type: .singleDigit) {
-			segment.tensPlace = currentToken.singleDigit.map(TensPlace.singleDigit)
+			segment.tensPlace = previousToken.singleDigit.map(TensPlace.singleDigit)
 		} else if match(type: .doubleDigitUnhyphenated) {
-			segment.tensPlace = currentToken.doubleDigitUnhyphenated.map(TensPlace.doubleDigitUnhyphenated)
+			segment.tensPlace = previousToken.doubleDigitUnhyphenated.map(TensPlace.doubleDigitUnhyphenated)
 		} else if match(type: .doubleDigitHyphenated) {
-			segment.tensPlace = currentToken.doubleDigitHyphenated.map(TensPlace.doubleDigitHyphenated)
+			segment.tensPlace = previousToken.doubleDigitHyphenated.map(TensPlace.doubleDigitHyphenated)
 		}
 
 		guard segment.isValid else {
 			throw ParserError.unexpectedToken(currentToken)
 		}
 
-		if match(type: .multiplier), let multiplier = currentToken.multiplier {
+		if match(type: .multiplier), let multiplier = previousToken.multiplier {
 			guard multiplier != .hundred else {
 				// This multiplier cannot be `hundred` since that is part of the segment
-				throw ParserError.unexpectedToken(currentToken)
+				throw ParserError.unexpectedToken(previousToken)
 			}
 			guard let lessThanOrEqual = lessThanOrEqual, multiplier.precedence <= lessThanOrEqual.precedence else {
 				throw ParserError.parsedMultiplierPrecedenceTooHigh(multiplier)
