@@ -10,6 +10,8 @@ public enum LexerError: Error, Equatable {
 }
 
 public struct Lexer {
+	public init() {}
+
 	public func scanNumber(string: String) -> Result<[Token], LexerError> {
 		do {
 			let tokens = try scanNumberThrowing(string: string)
@@ -70,7 +72,7 @@ public struct Lexer {
 		if word == "zero" {
 			return .zero
 		} else if let digit = Digit(rawValue: word) {
-			return .digit(digit)
+			return .singleDigit(digit)
 		} else if let doubleDigit = DoubleDigitUnhyphenated(rawValue: word) {
 			return .doubleDigitUnhyphenated(doubleDigit)
 		} else if let prefix = DoubleDigitPrefix(rawValue: word) {

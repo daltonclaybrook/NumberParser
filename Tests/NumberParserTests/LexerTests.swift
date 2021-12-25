@@ -6,7 +6,7 @@ final class LexerTests: XCTestCase {
 		let lexer = Lexer()
 		let tokens = try lexer.scanNumber(string: "one hundred fifty-five").get()
 		XCTAssertEqual(tokens, [
-			.digit(.one), .multiplier(.hundred), .doubleDigitHyphenated(.fifty, plus: .five)
+			.singleDigit(.one), .multiplier(.hundred), .doubleDigitHyphenated(.fifty, plus: .five)
 		])
 	}
 

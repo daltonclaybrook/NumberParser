@@ -2,7 +2,7 @@ public enum Token: Equatable {
 	/// special case for zero, which should only appear alone
 	case zero
 	/// e.g. one, nine
-	case digit(Digit)
+	case singleDigit(Digit)
 	/// e.g. eleven, nineteen
 	case doubleDigitUnhyphenated(DoubleDigitUnhyphenated)
 	/// e.g. forty-five
