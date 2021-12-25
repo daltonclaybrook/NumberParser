@@ -61,6 +61,12 @@ final class LexerTests: XCTestCase {
 		let result = lexer.scanNumber(string: "one hundred fifty-")
 		XCTAssertEqual(result.lexerError, .failedToScanDoubleDigitSuffix)
 	}
+
+	func testLexerFailsWithInvalidCharacterAtStartOfWord() throws {
+		let lexer = Lexer()
+		let result = lexer.scanNumber(string: "one hundred -ten")
+		XCTAssertEqual(result.lexerError, .invalidCharacter("-"))
+	}
 }
 
 extension Result {
