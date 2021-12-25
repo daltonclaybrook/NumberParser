@@ -13,9 +13,9 @@ enum TensPlace {
 }
 
 struct NumberSegment {
-	let hundredsPlace: Digit?
-	let tensPlace: TensPlace?
-	let multiplier: Multiplier?
+	var hundredsPlace: Digit? = nil
+	var tensPlace: TensPlace? = nil
+	var multiplier: Multiplier? = nil
 }
 
 extension NumberSegment {
@@ -26,6 +26,11 @@ extension NumberSegment {
 
 		let base = hundredsValue * 100 + tensValue
 		return multiplierValue * base
+	}
+
+	/// A number segment is valid if either the hundreds place or the tens place has a value
+	var isValid: Bool {
+		hundredsPlace != nil || tensPlace != nil
 	}
 }
 
