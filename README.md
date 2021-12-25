@@ -1,6 +1,9 @@
-# NumberParser
+![Build Status](https://github.com/daltonclaybrook/NumberParser/actions/workflows/swift.yml/badge.svg)
+[![codecov](https://codecov.io/gh/daltonclaybrook/NumberParser/branch/main/graph/badge.svg)](https://codecov.io/gh/daltonclaybrook/NumberParser)
+![Platforms](https://img.shields.io/badge/platforms-macOS%20%7C%20iOS%20%7C%20tvOS%20%7C%20watchOS-lightgrey)
+[![License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/daltonclaybrook/NumberParser/blob/main/LICENSE.md)
 
-A utility used to parse number strings, e.g. "eight thousand four hundred seventy-three"
+**NumberParser** is a Swift package used to parse number strings, e.g. "eight thousand four hundred seventy-three"
 
 ## Usage
 
